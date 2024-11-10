@@ -1,6 +1,13 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Num Sei (Update 1)", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
+-- Main Tab
+local MainTab = Window:MakeTab({
+Name = "Main",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
 -- Services
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -52,13 +59,6 @@ sound.Looped = true
 sound.Parent = SoundService
 sound:Play()
 end
-
--- Main Tab
-local MainTab = Window:MakeTab({
-Name = "Main",
-Icon = "rbxassetid://4483345998",
-PremiumOnly = false
-})
 
 -- WalkSpeed Toggle
 MainTab:MakeToggle({
