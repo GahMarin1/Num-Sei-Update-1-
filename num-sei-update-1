@@ -1,0 +1,117 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "Num Sei (Update 1)", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+-- Services
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local SoundService = game:GetService("SoundService")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- World IDs
+local worldIDs = {
+["CryptedAc"] = 6778163810
+}
+
+-- Music IDs
+local musicIDs = {
+["CyberMachine"] = 18841895741,
+["UziPack"] = 6742516704
+}
+
+-- Function to teleport all players
+local function teleportAllPlayers(worldID)
+for _, player in pairs(Players:GetPlayers()) do
+TeleportService:Teleport(worldID, player)
+end
+end
+
+-- Function to highlight player
+local function highlightPlayer(player, enable)
+if enable then
+local highlight = Instance.new("Highlight")
+highlight.Adornee = player.Character
+highlight.FillColor = Color3.new(1, 0, 0) -- Vermelho
+highlight.Parent = player.Character
+else
+for _, v in pairs(player.Character:GetChildren()) do
+if v:IsA("Highlight") then
+v:Destroy()
+end
+end
+end
+end
+
+-- Function to play music
+local function playMusic(musicId)
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://" .. musicId
+sound.Volume = 5
+sound.Looped = true
+sound.Parent = SoundService
+sound:Play()
+end
+
+-- Main Tab
+local MainTab = Window:MakeTab({
+Name = "Main",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+-- WalkSpeed Toggle
+MainTab:MakeToggle({
+Name = "WalkSpeed",
+Default = false,
+Callback = function(value)
+if value then
+humanoid.WalkSpeed = 50 -- Ajuste a velocidade de caminhada aqui
+else
+humanoid.WalkSpeed = 16 -- Velocidade padrão
+end
+end
+})
+
+-- JumpPower Toggle
+MainTab:MakeToggle({
+Name = "JumpPower",
+Default = false,
+Callback = function(value)
+if value then
+humanoid.JumpPower = 100 -- Ajuste a potência do pulo aqui
+else
+humanoid.JumpPower = 50 -- Potência de pulo padrão
+end
+end
+})
+
+-- World Selection Dropdown
+MainTab:MakeDropdown({
+Name = "Select World",
+Options = {"CryptedAc"},
+Callback = function(value)
+teleportAllPlayers(worldIDs[value])
+end
+})
+
+-- Highlight Player Toggle
+MainTab:MakeToggle({
+Name = "Highlight Player",
+Default = false,
+Callback = function(value)
+highlightPlayer(Players.LocalPlayer, value)
+end
+})
+
+-- Music Selection Dropdown
+MainTab:MakeDropdown({
+Name = "Select Music",
+Options = {"CyberMachine", "UziPack"},
+Callback = function(value)
+playMusic(musicIDs[value])
+end
+})
+
+-- Initialize
+OrionLib:Init()
